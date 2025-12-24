@@ -3,282 +3,339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>東京旅遊全攻略 - Tokyo Travel Pro</title>
+    <title>東京旅遊。旗艦攻略 - Tokyo Wanderlust</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
         :root {
-            --primary-red: #d90429;
-            --accent-blue: #00b4d8;
-            --dark-bg: #1a1a1a;
-            --glass-white: rgba(255, 255, 255, 0.9);
+            --jp-red: #bc002d;
+            --wash-white: #fdfdfd;
+            --ink-black: #2b2d42;
+            --bg: var(--wash-white);
+            --card: rgba(255,255,255,0.95);
+            --text: var(--ink-black);
+            --border: rgba(0,0,0,0.1);
         }
 
-        body { font-family: 'Noto Sans TC', sans-serif; overflow-x: hidden; }
-        
-        /* 精緻導覽列 */
+        [data-theme="dark"] {
+            --bg: #0b1020;
+            --card: rgba(255,255,255,.08);
+            --text: rgba(255,255,255,.92);
+            --border: rgba(255,255,255,.14);
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: 0.3s;
+        }
+
+        h1, h2, h3, .serif { font-family: 'Noto Serif TC', serif; }
+
+        /* Navbar */
         .navbar {
             backdrop-filter: blur(15px);
-            background-color: rgba(255, 255, 255, 0.8) !important;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+            background: rgba(255, 255, 255, 0.8) !important;
+            border-bottom: 1px solid var(--border);
         }
-        .navbar-brand { font-family: 'Montserrat', sans-serif; color: var(--primary-red) !important; font-weight: 800; }
+        [data-theme="dark"] .navbar { background: rgba(0,0,0,.35) !important; }
 
-        /* 全螢幕 Video/Hero Section 概念圖 */
-        .hero-wrap {
-            height: 90vh;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), 
-                        url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1920&q=80');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
+        /* Hero Carousel */
+        .hero-carousel img {
+            height: 65vh;
+            object-fit: cover;
         }
 
-        /* 資訊面板區塊 */
-        .info-panel {
-            background: var(--glass-white);
-            border-radius: 20px;
-            margin-top: -80px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        /* Weather Section */
+        .weather-section {
+            background: var(--card);
+            margin-top: -50px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.1);
+            position: relative; z-index: 10;
             padding: 30px;
-            z-index: 100;
-            position: relative;
-        }
-
-        /* 景點卡片懸停效果 */
-        .travel-card {
-            border: none;
             border-radius: 15px;
-            transition: all 0.4s ease;
+            border: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Card System */
+        .spot-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
             overflow: hidden;
+            transition: 0.3s;
         }
-        .travel-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-        }
-        .travel-card img { height: 250px; object-fit: cover; }
+        .spot-card:hover { transform: translateY(-10px); border-color: var(--jp-red); }
+        .spot-img { height: 220px; object-fit: cover; }
 
-        /* 側邊天氣/快速選單 */
-        #back-to-top {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: none;
-            z-index: 999;
+        /* Planner */
+        .plan-item {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 12px; border: 1px solid var(--border);
+            border-radius: 12px; background: var(--card); margin-bottom: 10px;
         }
 
-        /* 購物標籤 */
-        .tag-shopping { background: #ffd166; color: #000; padding: 3px 10px; border-radius: 5px; font-size: 12px; }
-        .tag-food { background: #ef476f; color: #fff; padding: 3px 10px; border-radius: 5px; font-size: 12px; }
+        #google-mini-map { height: 250px; width: 100%; border-radius: 10px; }
+        #toTop { position: fixed; bottom: 20px; right: 20px; z-index: 99; background: var(--jp-red); color: white; border: none; padding: 10px 15px; border-radius: 5px; opacity: 0; transition: 0.3s; }
+        #toTop.show { opacity: 1; }
     </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="#">TOKYO EXPLORER</a>
+            <a class="navbar-brand fw-bold text-danger" href="#">TOKYO TRAVEL GUIDE</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto fw-bold">
-                    <li class="nav-item px-2"><a class="nav-link text-dark" href="#about">城市導覽</a></li>
-                    <li class="nav-item px-2"><a class="nav-link text-dark" href="#spots">景點介紹</a></li>
-                    <li class="nav-item px-2"><a class="nav-link text-dark" href="#shopping">購物行程</a></li>
-                    <li class="nav-item px-2"><a class="nav-link text-dark" href="#transport">交通指南</a></li>
+                <ul class="navbar-nav ms-auto align-items-center">
+                    <li class="nav-item px-2"><a class="nav-link" href="#weather">實時氣象</a></li>
+                    <li class="nav-item px-2"><a class="nav-link" href="#spots">探索景點</a></li>
+                    <li class="nav-item px-2"><a class="nav-link" href="#planner">行程規劃</a></li>
+                    <li class="nav-item ms-lg-3">
+                        <button id="themeBtn" class="btn btn-outline-danger btn-sm">切換主題</button>
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="hero-wrap">
-        <div data-aos="zoom-in">
-            <h1 class="display-1 fw-bold mb-3">夢幻。東京</h1>
-            <p class="fs-4 mb-4">感受繁華霓虹與千年古剎的交織</p>
-            <a href="#spots" class="btn btn-danger btn-lg rounded-pill px-5">開始探索</a>
+    <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1600&q=80" class="d-block w-100" alt="東京鐵塔">
+            </div>
+            <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1600&q=80" class="d-block w-100" alt="新宿夜景">
+            </div>
+        </div>
+        <div class="container position-absolute top-50 start-50 translate-middle text-center text-white" style="z-index: 5;">
+            <h1 class="display-3 fw-bold serif" style="text-shadow: 2px 2px 15px rgba(0,0,0,0.5);">再發現。東京</h1>
+            <p class="lead">穿梭於江戶情懷與未來都市之間</p>
         </div>
     </div>
 
-    <div class="container">
-        <div class="info-panel" data-aos="fade-up">
-            <div class="row text-center align-items-center">
-                <div class="col-md-3 border-end">
-                    <h6 class="text-muted">當前溫度</h6>
-                    <h4 class="fw-bold"><i class="bi bi-thermometer-half text-danger"></i> 12°C</h4>
+    <div class="container" id="weather">
+        <div class="weather-section" data-aos="fade-up">
+            <div class="row align-items-center border-bottom pb-3 mb-4">
+                <div class="col-6">
+                    <h3 class="serif fw-bold mb-0"><i class="bi bi-geo-alt-fill text-danger"></i> 東京。實時氣象</h3>
                 </div>
-                <div class="col-md-3 border-end">
-                    <h6 class="text-muted">今日匯率 (JPY/TWD)</h6>
-                    <h4 class="fw-bold">0.21</h4>
+                <div class="col-6 text-end">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <img id="current-icon" src="" width="60">
+                        <div class="ms-2 text-start">
+                            <h2 id="current-temp" class="fw-bold mb-0">--°C</h2>
+                            <p id="current-desc" class="text-muted small mb-0">資料同步中...</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-3 border-end">
-                    <h6 class="text-muted">最佳旅遊季節</h6>
-                    <h4 class="fw-bold text-success">櫻花季 (3-4月)</h4>
-                </div>
-                <div class="col-md-3">
-                    <h6 class="text-muted">東京當地時間</h6>
-                    <h4 id="tokyo-time" class="fw-bold">--:--:--</h4>
-                </div>
+            </div>
+            <div id="forecast-container" class="row g-2 justify-content-center">
+                <div class="text-center py-2 text-muted small">正在連接 OpenWeather One Call 3.0 (每日限制 1,000 次已生效)...</div>
             </div>
         </div>
     </div>
 
     <section id="spots" class="container py-5 mt-5">
-        <div class="d-flex justify-content-between align-items-end mb-5">
-            <div data-aos="fade-right">
-                <h2 class="fw-bold"><i class="bi bi-geo-alt-fill text-danger me-2"></i>必訪人氣景點</h2>
-                <p class="text-muted">我們精選了東京最具代表性的旅遊目的地</p>
+        <div class="d-flex flex-wrap justify-content-between align-items-end mb-4" data-aos="fade-up">
+            <div>
+                <h2 class="serif fw-bold display-6">深度景點探索</h2>
+                <p class="text-muted">點擊卡片收藏或加入行程</p>
             </div>
-            <a href="#" class="btn btn-outline-dark rounded-pill">看更多景點</a>
+            <div class="d-flex gap-2">
+                <input id="searchInput" class="form-control" style="width: 250px;" placeholder="搜尋景點名稱...">
+                <select id="categorySelect" class="form-select">
+                    <option value="all">所有類別</option>
+                    <option value="culture">文化傳統</option>
+                    <option value="trend">潮流購物</option>
+                    <option value="anime">動漫文化</option>
+                </select>
+            </div>
         </div>
+        <div class="row g-4" id="spotsGrid"></div>
+    </section>
 
+    <section id="planner" class="container py-5">
         <div class="row g-4">
-            <div class="col-md-4" data-aos="fade-up">
-                <div class="card h-100 travel-card shadow">
-                    <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="東京鐵塔">
-                    <div class="card-body">
-                        <span class="tag-food mb-2 d-inline-block">城市地標</span>
-                        <h5 class="card-title fw-bold">東京鐵塔 (Tokyo Tower)</h5>
-                        <p class="card-text text-muted">位於港區的廣播電視塔，夜晚亮起的燈光是東京最浪漫的代名詞。</p>
-                        <hr>
-                        <div class="d-flex justify-content-between align-items-center text-secondary">
-                            <span><i class="bi bi-clock me-1"></i> 09:00 - 22:30</span>
-                            <span class="text-danger fw-bold">￥1,200起</span>
-                        </div>
-                    </div>
+            <div class="col-lg-7" data-aos="fade-right">
+                <div class="weather-section h-100">
+                    <h4 class="fw-bold serif mb-4">我的行程規劃</h4>
+                    <div id="planList" class="d-flex flex-column gap-2"></div>
+                    <div id="planEmpty" class="text-muted text-center py-4">目前行程是空的，去上面挑選景點吧！</div>
+                    <button id="btnExport" class="btn btn-danger w-100 mt-3 rounded-pill">匯出規劃清單</button>
                 </div>
             </div>
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="card h-100 travel-card shadow">
-                    <img src="https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="淺草">
-                    <div class="card-body">
-                        <span class="tag-food mb-2 d-inline-block">歷史文化</span>
-                        <h5 class="card-title fw-bold">淺草寺與雷門</h5>
-                        <p class="card-text text-muted">穿過巨大的雷門燈籠，在仲見世通尋找傳統的日本小吃與工藝品。</p>
-                        <hr>
-                        <div class="d-flex justify-content-between align-items-center text-secondary">
-                            <span><i class="bi bi-clock me-1"></i> 24小時開放</span>
-                            <span class="text-success fw-bold">免費入場</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="card h-100 travel-card shadow">
-                    <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="新宿">
-                    <div class="card-body">
-                        <span class="tag-shopping mb-2 d-inline-block">潮流購物</span>
-                        <h5 class="card-title fw-bold">新宿歌舞伎町</h5>
-                        <p class="card-text text-muted">世界級的鬧區，集結了百貨公司、機器人餐廳與哥吉拉地標。</p>
-                        <hr>
-                        <div class="d-flex justify-content-between align-items-center text-secondary">
-                            <span><i class="bi bi-clock me-1"></i> 越晚越熱鬧</span>
-                            <span class="text-warning fw-bold">消費視店家</span>
-                        </div>
-                    </div>
+            <div class="col-lg-5" data-aos="fade-left">
+                <div class="weather-section h-100">
+                    <h4 class="fw-bold serif mb-3">收藏清單</h4>
+                    <div id="favList"></div>
+                    <div id="favEmpty" class="text-muted text-center">尚未收藏任何景點。</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="transport" class="bg-light py-5">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6" data-aos="fade-right">
-                    <h2 class="fw-bold mb-4">掌握東京交通</h2>
-                    <div class="accordion shadow-sm" id="transportAccordion">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
-                                    <i class="bi bi-train-front me-2"></i> JR 山手線
-                                </button>
-                            </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#transportAccordion">
-                                <div class="accordion-body">
-                                    東京最重要的環狀線，串連新宿、澀谷、東京、上野等大站。
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-                                    <i class="bi bi-credit-card me-2"></i> Suica / Pasmo IC卡
-                                </button>
-                            </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#transportAccordion">
-                                <div class="accordion-body">
-                                    像悠遊卡一樣，一卡在手即可搭乘地鐵、公車，甚至在便利商店消費。
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 p-4" data-aos="fade-left">
-                    <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80" class="img-fluid rounded-4 shadow" alt="東京交通">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-dark text-white pt-5 pb-3">
-        <div class="container text-center">
-            <div class="row mb-4">
-                <div class="col-md-4">
-                    <h5 class="fw-bold text-danger">TOKYO EXPLORER</h5>
-                    <p class="small">專業的東京旅遊指南，帶您看見不一樣的日本。</p>
-                </div>
-                <div class="col-md-4">
-                    <h6>快速連結</h6>
-                    <ul class="list-unstyled small">
-                        <li><a href="#" class="text-secondary text-decoration-none">簽證資訊</a></li>
-                        <li><a href="#" class="text-secondary text-decoration-none">航空公司預約</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-4">
-                    <h6>聯絡我們</h6>
-                    <p class="small text-secondary"><i class="bi bi-envelope"></i> service@tokyotravel.com</p>
-                </div>
-            </div>
-            <hr class="bg-secondary">
-            <p class="small text-secondary mb-0">&copy; 2025 Tokyo Travel Pro. 網頁設計作業使用。</p>
-        </div>
+    <footer class="bg-dark text-white py-4 mt-5 text-center">
+        <p class="mb-1">API: OpenWeather (UK) & Google Maps (USA)｜無大陸品牌組件 </p>
+        <p class="small text-secondary mb-0">© 2025 Tokyo Travel Guide 作業學術使用 [cite: 119]</p>
     </footer>
 
-    <button id="back-to-top" class="btn btn-danger rounded-circle shadow-lg"><i class="bi bi-arrow-up"></i></button>
+    <button id="toTop">↑</button>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2DLTV1iolBo5XCrGPofVJIof4DW2marE" async defer></script>
+
     <script>
-        AOS.init({ duration: 800, once: true });
+        // --- 核心數據 ---
+        const WEATHER_KEY = '1a2807cc2da97931d066c115631af03d'; // 
+        const LAT = 35.6895, LON = 139.6917;
 
-        // 東京即時時間更新功能
-        function updateTime() {
-            const options = { timeZone: 'Asia/Tokyo', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
-            const tokyoTime = new Intl.DateTimeFormat('zh-TW', options).format(new Date());
-            document.getElementById('tokyo-time').innerText = tokyoTime;
+        const spots = [
+            { id: "asakusa", name: "淺草寺", category: "culture", area: "台東區", rating: 4.7, time: "2-3 小時", img: "https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&fit=crop&w=800&q=80", desc: "東京最古老的寺院，著名的雷門與仲見世通。", lat: 35.7148, lng: 139.7967 },
+            { id: "shibuya", name: "澀谷十字路口", category: "trend", area: "澀谷區", rating: 4.6, time: "1-2 小時", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80", desc: "全球最繁忙路口，體驗潮流與生命力。", lat: 35.6585, lng: 139.7013 },
+            { id: "meiji", name: "明治神宮", category: "culture", area: "澀谷區", rating: 4.8, time: "2-3 小時", img: "https://images.unsplash.com/photo-1542931287-023b922fa89b?auto=format&fit=crop&w=800&q=80", desc: "隱身都市中的神聖森林。", lat: 35.6764, lng: 139.6993 },
+            { id: "akiba", name: "秋葉原", category: "anime", area: "千代田區", rating: 4.5, time: "3-5 小時", img: "https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&w=800&q=80", desc: "動漫愛好者的天堂。", lat: 35.6983, lng: 139.7731 }
+        ];
+
+        let favSet = new Set(JSON.parse(localStorage.getItem('tokyoFav') || "[]"));
+        let plan = JSON.parse(localStorage.getItem('tokyoPlan') || "[]");
+
+        AOS.init();
+
+        // --- 氣象功能 ---
+        async function updateWeather() {
+            try {
+                const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${LAT}&lon=${LON}&appid=${WEATHER_KEY}&units=metric&lang=zh_tw`; // 
+                const res = await fetch(url);
+                const data = await res.json();
+                document.getElementById('current-temp').innerText = `${Math.round(data.current.temp)}°C`;
+                document.getElementById('current-desc').innerText = data.current.weather[0].description;
+                document.getElementById('current-icon').src = `https://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`;
+                
+                const container = document.getElementById('forecast-container');
+                container.innerHTML = '';
+                data.daily.slice(0, 7).forEach((day, i) => {
+                    const date = new Date(day.dt * 1000);
+                    container.innerHTML += `
+                        <div class="col px-1 text-center border-end">
+                            <div class="small fw-bold">${i === 0 ? '今日' : (date.getMonth()+1)+'/'+date.getDate()}</div>
+                            <img src="https://openweathermap.org/img/wn/${day.weather[0].icon}.png" width="30">
+                            <div class="small text-danger">${Math.round(day.temp.max)}°</div>
+                            <div class="small text-muted">${Math.round(day.temp.min)}°</div>
+                        </div>`;
+                });
+            } catch (e) { console.log("氣象同步中..."); }
         }
-        setInterval(updateTime, 1000);
-        updateTime();
 
-        // 返回頂部功能
-        const backToTopBtn = document.getElementById('back-to-top');
-        window.onscroll = function() {
-            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
-                backToTopBtn.style.display = "block";
-            } else {
-                backToTopBtn.style.display = "none";
-            }
+        // --- 核心渲染 ---
+        function renderGrid() {
+            const grid = document.getElementById('spotsGrid');
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const cat = document.getElementById('categorySelect').value;
+            
+            grid.innerHTML = '';
+            spots.filter(s => (cat === 'all' || s.category === cat) && s.name.includes(search)).forEach(s => {
+                grid.innerHTML += `
+                    <div class="col-md-6 col-lg-3">
+                        <div class="spot-card h-100">
+                            <img src="${s.img}" class="spot-img w-100">
+                            <div class="p-3">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="fw-bold">${s.name}</h5>
+                                    <button class="btn btn-sm btn-outline-danger border-0" onclick="toggleFav('${s.id}')">
+                                        ${favSet.has(s.id) ? '♥' : '♡'}
+                                    </button>
+                                </div>
+                                <p class="text-muted small">${s.desc}</p>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-danger btn-sm" onclick="showDetail('${s.id}')">了解更多</button>
+                                    <button class="btn btn-danger btn-sm" onclick="addToPlan('${s.id}')" ${plan.includes(s.id)?'disabled':''}>
+                                        ${plan.includes(s.id)?'已加入':'加入行程'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        // --- 功能模組 ---
+        function showDetail(id) {
+            const s = spots.find(x => x.id === id);
+            Swal.fire({
+                title: `<h3 class="serif fw-bold">${s.name}</h3>`,
+                html: `<img src="${s.img}" class="img-fluid rounded mb-3" style="height:200px; object-fit:cover; width:100%;">
+                       <p class="small text-start">${s.desc}</p>
+                       <div id="google-mini-map"></div>`,
+                didOpen: () => {
+                    if (typeof google !== 'undefined') {
+                        const loc = { lat: s.lat, lng: s.lng };
+                        const map = new google.maps.Map(document.getElementById("google-mini-map"), { zoom: 15, center: loc, disableDefaultUI: true });
+                        new google.maps.Marker({ position: loc, map: map });
+                    }
+                },
+                confirmButtonText: '查看導航', confirmButtonColor: '#bc002d'
+            }).then(r => { if(r.isConfirmed) window.open(`https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}`); });
+        }
+
+        function toggleFav(id) {
+            if (favSet.has(id)) favSet.delete(id); else favSet.add(id);
+            localStorage.setItem('tokyoFav', JSON.stringify([...favSet]));
+            renderFav(); renderGrid();
+        }
+
+        function renderFav() {
+            const list = document.getElementById('favList');
+            const arr = [...favSet].map(id => spots.find(s => s.id === id)).filter(Boolean);
+            document.getElementById('favEmpty').style.display = arr.length ? 'none' : 'block';
+            list.innerHTML = arr.map(s => `
+                <div class="plan-item small">
+                    <span class="fw-bold">${s.name}</span>
+                    <button class="btn btn-sm btn-link text-danger" onclick="toggleFav('${s.id}')">移除</button>
+                </div>`).join('');
+        }
+
+        function addToPlan(id) {
+            if (!plan.includes(id)) { plan.push(id); localStorage.setItem('tokyoPlan', JSON.stringify(plan)); renderPlan(); renderGrid(); }
+        }
+
+        function renderPlan() {
+            const list = document.getElementById('planList');
+            document.getElementById('planEmpty').style.display = plan.length ? 'none' : 'block';
+            list.innerHTML = plan.map((id, i) => {
+                const s = spots.find(x => x.id === id);
+                return `
+                    <div class="plan-item">
+                        <div><small class="text-danger fw-bold me-2">D${i+1}</small>${s.name}</div>
+                        <button class="btn btn-sm btn-outline-secondary border-0" onclick="removeFromPlan(${i})">✕</button>
+                    </div>`;
+            }).join('');
+        }
+
+        function removeFromPlan(idx) { plan.splice(idx, 1); localStorage.setItem('tokyoPlan', JSON.stringify(plan)); renderPlan(); renderGrid(); }
+
+        // --- 事件監聽 ---
+        document.getElementById('themeBtn').onclick = () => {
+            const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', theme);
         };
-        backToTopBtn.onclick = function() {
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        };
+        document.getElementById('searchInput').oninput = renderGrid;
+        document.getElementById('categorySelect').onchange = renderGrid;
+        window.onscroll = () => document.getElementById('toTop').classList.toggle('show', window.scrollY > 600);
+        document.getElementById('toTop').onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+        // --- 初始化 ---
+        updateWeather(); renderGrid(); renderFav(); renderPlan();
     </script>
 </body>
 </html>
