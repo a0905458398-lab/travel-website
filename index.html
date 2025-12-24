@@ -3,179 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>東京。探索現代與傳統 - Tokyo Travel Elite</title>
+    <title>東京旅遊全攻略 - Tokyo Travel Pro</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&display=swap" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&family=Montserrat:wght@600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         :root {
-            --primary-color: #ff4757;
-            --dark-overlay: rgba(0, 0, 0, 0.4);
+            --primary-red: #d90429;
+            --accent-blue: #00b4d8;
+            --dark-bg: #1a1a1a;
+            --glass-white: rgba(255, 255, 255, 0.9);
         }
 
-        body {
-            font-family: 'Noto Sans TC', sans-serif;
-            scroll-behavior: smooth;
-            background-color: #f8f9fa;
-        }
-
-        /* 玻璃擬態導覽列 */
+        body { font-family: 'Noto Sans TC', sans-serif; overflow-x: hidden; }
+        
+        /* 精緻導覽列 */
         .navbar {
-            backdrop-filter: blur(10px);
-            background-color: rgba(33, 37, 41, 0.8) !important;
-            transition: 0.3s;
+            backdrop-filter: blur(15px);
+            background-color: rgba(255, 255, 255, 0.8) !important;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
         }
+        .navbar-brand { font-family: 'Montserrat', sans-serif; color: var(--primary-red) !important; font-weight: 800; }
 
-        /* 首頁大圖進階設定 */
-        .hero-section {
-            height: 80vh;
-            object-fit: cover;
-            filter: brightness(0.8);
-        }
-
-        .carousel-caption {
-            bottom: 30%;
-            background: rgba(0,0,0,0.3);
-            padding: 2rem;
-            border-radius: 15px;
-            backdrop-filter: blur(5px);
-        }
-
-        /* 景點卡片優化 */
-        .custom-card {
-            border: none;
-            border-radius: 20px;
-            overflow: hidden;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .custom-card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-
-        .card-img-top {
-            height: 250px;
-            object-fit: cover;
-            transition: 0.5s;
-        }
-
-        .custom-card:hover .card-img-top {
-            transform: scale(1.1);
-        }
-
-        /* 新增：美食分類標籤 */
-        .category-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--primary-color);
+        /* 全螢幕 Video/Hero Section 概念圖 */
+        .hero-wrap {
+            height: 90vh;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), 
+                        url('https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: white;
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-size: 0.8rem;
+            text-align: center;
         }
 
-        /* 頁尾美化 */
-        footer {
-            background: linear-gradient(45deg, #212529, #343a40);
-            color: #adb5bd;
-            padding: 60px 0 20px;
+        /* 資訊面板區塊 */
+        .info-panel {
+            background: var(--glass-white);
+            border-radius: 20px;
+            margin-top: -80px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+            z-index: 100;
+            position: relative;
         }
 
-        .btn-primary {
-            background-color: var(--primary-color);
+        /* 景點卡片懸停效果 */
+        .travel-card {
             border: none;
-            padding: 10px 25px;
-            border-radius: 50px;
+            border-radius: 15px;
+            transition: all 0.4s ease;
+            overflow: hidden;
         }
+        .travel-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        .travel-card img { height: 250px; object-fit: cover; }
+
+        /* 側邊天氣/快速選單 */
+        #back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: none;
+            z-index: 999;
+        }
+
+        /* 購物標籤 */
+        .tag-shopping { background: #ffd166; color: #000; padding: 3px 10px; border-radius: 5px; font-size: 12px; }
+        .tag-food { background: #ef476f; color: #fff; padding: 3px 10px; border-radius: 5px; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold" href="#"><i class="bi bi-airplane-engines-fill me-2"></i>TokyoTravel</a>
+            <a class="navbar-brand" href="#">TOKYO EXPLORER</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#about">行程規劃</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#spots">熱門景點</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#food">必吃美食</a></li>
-                    <li class="nav-item"><a class="nav-link btn btn-primary btn-sm ms-lg-3 text-white" href="#contact">立即預約</a></li>
+                <ul class="navbar-nav ms-auto fw-bold">
+                    <li class="nav-item px-2"><a class="nav-link text-dark" href="#about">城市導覽</a></li>
+                    <li class="nav-item px-2"><a class="nav-link text-dark" href="#spots">景點介紹</a></li>
+                    <li class="nav-item px-2"><a class="nav-link text-dark" href="#shopping">購物行程</a></li>
+                    <li class="nav-item px-2"><a class="nav-link text-dark" href="#transport">交通指南</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1200&q=80" class="d-block w-100 hero-section" alt="東京鐵塔">
-                <div class="carousel-caption">
-                    <h1 class="display-3 fw-bold">探索東京之美</h1>
-                    <p class="lead">從繁華的澀谷到靜謐的淺草，發現城市的新視角</p>
+    <div class="hero-wrap">
+        <div data-aos="zoom-in">
+            <h1 class="display-1 fw-bold mb-3">夢幻。東京</h1>
+            <p class="fs-4 mb-4">感受繁華霓虹與千年古剎的交織</p>
+            <a href="#spots" class="btn btn-danger btn-lg rounded-pill px-5">開始探索</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="info-panel" data-aos="fade-up">
+            <div class="row text-center align-items-center">
+                <div class="col-md-3 border-end">
+                    <h6 class="text-muted">當前溫度</h6>
+                    <h4 class="fw-bold"><i class="bi bi-thermometer-half text-danger"></i> 12°C</h4>
                 </div>
-            </div>
-            <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1200&q=80" class="d-block w-100 hero-section" alt="新宿夜景">
-                <div class="carousel-caption">
-                    <h1 class="display-3 fw-bold">不夜城的魅力</h1>
-                    <p class="lead">霓虹燈下的視覺饗宴，享受最精彩的日本夜生活</p>
+                <div class="col-md-3 border-end">
+                    <h6 class="text-muted">今日匯率 (JPY/TWD)</h6>
+                    <h4 class="fw-bold">0.21</h4>
+                </div>
+                <div class="col-md-3 border-end">
+                    <h6 class="text-muted">最佳旅遊季節</h6>
+                    <h4 class="fw-bold text-success">櫻花季 (3-4月)</h4>
+                </div>
+                <div class="col-md-3">
+                    <h6 class="text-muted">東京當地時間</h6>
+                    <h4 id="tokyo-time" class="fw-bold">--:--:--</h4>
                 </div>
             </div>
         </div>
     </div>
 
-    <section id="spots" class="container py-5">
-        <div class="text-center mb-5" data-aos="fade-up">
-            <h2 class="fw-bold">東京必去熱門景點</h2>
-            <hr class="mx-auto" style="width: 50px; height: 3px; background: var(--primary-color);">
+    <section id="spots" class="container py-5 mt-5">
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div data-aos="fade-right">
+                <h2 class="fw-bold"><i class="bi bi-geo-alt-fill text-danger me-2"></i>必訪人氣景點</h2>
+                <p class="text-muted">我們精選了東京最具代表性的旅遊目的地</p>
+            </div>
+            <a href="#" class="btn btn-outline-dark rounded-pill">看更多景點</a>
         </div>
-        
+
         <div class="row g-4">
+            <div class="col-md-4" data-aos="fade-up">
+                <div class="card h-100 travel-card shadow">
+                    <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="東京鐵塔">
+                    <div class="card-body">
+                        <span class="tag-food mb-2 d-inline-block">城市地標</span>
+                        <h5 class="card-title fw-bold">東京鐵塔 (Tokyo Tower)</h5>
+                        <p class="card-text text-muted">位於港區的廣播電視塔，夜晚亮起的燈光是東京最浪漫的代名詞。</p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center text-secondary">
+                            <span><i class="bi bi-clock me-1"></i> 09:00 - 22:30</span>
+                            <span class="text-danger fw-bold">￥1,200起</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
-                <div class="card h-100 shadow-sm custom-card">
-                    <span class="category-badge">文化遺產</span>
-                    <img src="https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&fit=crop&w=400&q=80" class="card-img-top" alt="淺草寺">
-                    <div class="card-body p-4">
-                        <h5 class="card-title fw-bold">淺草寺</h5>
-                        <p class="card-text text-muted">感受濃厚的江戶風情與雷門的壯麗，探索東京最古老的靈魂。</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="text-warning"><i class="bi bi-star-fill"></i> 4.8</span>
-                            <a href="#" class="btn btn-outline-dark rounded-pill px-4">查看地圖</a>
+                <div class="card h-100 travel-card shadow">
+                    <img src="https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="淺草">
+                    <div class="card-body">
+                        <span class="tag-food mb-2 d-inline-block">歷史文化</span>
+                        <h5 class="card-title fw-bold">淺草寺與雷門</h5>
+                        <p class="card-text text-muted">穿過巨大的雷門燈籠，在仲見世通尋找傳統的日本小吃與工藝品。</p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center text-secondary">
+                            <span><i class="bi bi-clock me-1"></i> 24小時開放</span>
+                            <span class="text-success fw-bold">免費入場</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
-                <div class="card h-100 shadow-sm custom-card">
-                    <span class="category-badge">潮流文化</span>
-                    <img src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=400&q=80" class="card-img-top" alt="澀谷">
-                    <div class="card-body p-4">
-                        <h5 class="card-title fw-bold">澀谷十字路口</h5>
-                        <p class="card-text text-muted">站在世界最繁忙的交匯點，體驗與千人同時邁步的震撼瞬間。</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="text-warning"><i class="bi bi-star-fill"></i> 4.9</span>
-                            <a href="#" class="btn btn-outline-dark rounded-pill px-4">查看地圖</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
-                <div class="card h-100 shadow-sm custom-card">
-                    <span class="category-badge">電子次文化</span>
-                    <img src="https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="秋葉原">
-                    <div class="card-body p-4">
-                        <h5 class="card-title fw-bold">秋葉原電器街</h5>
-                        <p class="card-text text-muted">動漫迷的朝聖之地，從精密電子儀器到最新的二次元周邊應有盡有。</p>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span class="text-warning"><i class="bi bi-star-fill"></i> 4.7</span>
-                            <a href="#" class="btn btn-outline-dark rounded-pill px-4">查看地圖</a>
+                <div class="card h-100 travel-card shadow">
+                    <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80" class="card-img-top" alt="新宿">
+                    <div class="card-body">
+                        <span class="tag-shopping mb-2 d-inline-block">潮流購物</span>
+                        <h5 class="card-title fw-bold">新宿歌舞伎町</h5>
+                        <p class="card-text text-muted">世界級的鬧區，集結了百貨公司、機器人餐廳與哥吉拉地標。</p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center text-secondary">
+                            <span><i class="bi bi-clock me-1"></i> 越晚越熱鬧</span>
+                            <span class="text-warning fw-bold">消費視店家</span>
                         </div>
                     </div>
                 </div>
@@ -183,71 +188,96 @@
         </div>
     </section>
 
-    <section class="bg-dark text-white py-5">
+    <section id="transport" class="bg-light py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6" data-aos="fade-right">
+                    <h2 class="fw-bold mb-4">掌握東京交通</h2>
+                    <div class="accordion shadow-sm" id="transportAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                    <i class="bi bi-train-front me-2"></i> JR 山手線
+                                </button>
+                            </h2>
+                            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#transportAccordion">
+                                <div class="accordion-body">
+                                    東京最重要的環狀線，串連新宿、澀谷、東京、上野等大站。
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                    <i class="bi bi-credit-card me-2"></i> Suica / Pasmo IC卡
+                                </button>
+                            </h2>
+                            <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#transportAccordion">
+                                <div class="accordion-body">
+                                    像悠遊卡一樣，一卡在手即可搭乘地鐵、公車，甚至在便利商店消費。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 p-4" data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1542051841857-5f90071e7989?auto=format&fit=crop&w=800&q=80" class="img-fluid rounded-4 shadow" alt="東京交通">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white pt-5 pb-3">
         <div class="container text-center">
-            <div class="row">
-                <div class="col-md-4" data-aos="zoom-in">
-                    <h2 class="fw-bold">1,200+</h2>
-                    <p class="text-secondary">合作景點</p>
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <h5 class="fw-bold text-danger">TOKYO EXPLORER</h5>
+                    <p class="small">專業的東京旅遊指南，帶您看見不一樣的日本。</p>
                 </div>
-                <div class="col-md-4" data-aos="zoom-in" data-aos-delay="100">
-                    <h2 class="fw-bold">45k</h2>
-                    <p class="text-secondary">年度旅客人數</p>
+                <div class="col-md-4">
+                    <h6>快速連結</h6>
+                    <ul class="list-unstyled small">
+                        <li><a href="#" class="text-secondary text-decoration-none">簽證資訊</a></li>
+                        <li><a href="#" class="text-secondary text-decoration-none">航空公司預約</a></li>
+                    </ul>
                 </div>
-                <div class="col-md-4" data-aos="zoom-in" data-aos-delay="200">
-                    <h2 class="fw-bold">4.9/5</h2>
-                    <p class="text-secondary">旅客滿意評分</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contact" class="py-5">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-8 text-center p-5 shadow-lg rounded-4 bg-white" data-aos="flip-left">
-                    <h3 class="fw-bold mb-4">掌握東京第一手消息</h3>
-                    <p class="text-muted mb-4">輸入您的 Email，每週獲取最新的隱藏美食清單與交通優惠券。</p>
-                    <div class="input-group mb-3 px-md-5">
-                        <input type="email" class="form-control form-control-lg border-primary-subtle" placeholder="example@email.com">
-                        <button class="btn btn-primary btn-lg" type="button">立即訂閱</button>
-                    </div>
-                    <small class="text-secondary"><i class="bi bi-shield-check"></i> 我們承諾不會發送垃圾郵件給您。</small>
+                <div class="col-md-4">
+                    <h6>聯絡我們</h6>
+                    <p class="small text-secondary"><i class="bi bi-envelope"></i> service@tokyotravel.com</p>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <footer class="text-center">
-        <div class="container">
-            <div class="mb-4">
-                <a href="#" class="text-white me-3 fs-4"><i class="bi bi-facebook"></i></a>
-                <a href="#" class="text-white me-3 fs-4"><i class="bi bi-instagram"></i></a>
-                <a href="#" class="text-white fs-4"><i class="bi bi-youtube"></i></a>
-            </div>
-            <p class="mb-1">&copy; 2025 Tokyo Travel Guide. 網頁設計作業使用。</p>
-            <p class="small">本網站為學術練習用途，非真實旅遊機構。圖片：Unsplash / 技術：Bootstrap 5 & AOS</p>
+            <hr class="bg-secondary">
+            <p class="small text-secondary mb-0">&copy; 2025 Tokyo Travel Pro. 網頁設計作業使用。</p>
         </div>
     </footer>
+
+    <button id="back-to-top" class="btn btn-danger rounded-circle shadow-lg"><i class="bi bi-arrow-up"></i></button>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        // 初始化 AOS 動畫庫
-        AOS.init({
-            duration: 1000,
-            once: true
-        });
+        AOS.init({ duration: 800, once: true });
 
-        // 導覽列滾動變色效果
+        // 東京即時時間更新功能
+        function updateTime() {
+            const options = { timeZone: 'Asia/Tokyo', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+            const tokyoTime = new Intl.DateTimeFormat('zh-TW', options).format(new Date());
+            document.getElementById('tokyo-time').innerText = tokyoTime;
+        }
+        setInterval(updateTime, 1000);
+        updateTime();
+
+        // 返回頂部功能
+        const backToTopBtn = document.getElementById('back-to-top');
         window.onscroll = function() {
-            var nav = document.querySelector('.navbar');
-            if (window.pageYOffset > 100) {
-                nav.style.padding = "5px 0";
-                nav.style.backgroundColor = "rgba(0,0,0,0.9) !important";
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTopBtn.style.display = "block";
             } else {
-                nav.style.padding = "15px 0";
+                backToTopBtn.style.display = "none";
             }
+        };
+        backToTopBtn.onclick = function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
         };
     </script>
 </body>
