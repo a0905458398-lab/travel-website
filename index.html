@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>東京。旗艦攻略 2025 - Tokyo Wanderlust</title>
+    <title>東京旅遊。旗艦攻略 2025 - Tokyo Wanderlust</title>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@300;500&display=swap" rel="stylesheet">
@@ -13,128 +13,98 @@
 
     <style>
         :root {
-            --jp-red: #bc002d;
-            --wash-white: #fdfdfd;
-            --ink-black: #2b2d42;
-            --bg: var(--wash-white);
+            --jp-red: #bc002d; --wash-white: #fdfdfd; --ink-black: #2b2d42;
+            --bg: var(--wash-white); --text: var(--ink-black); --border: rgba(0,0,0,0.1);
             --card: rgba(255,255,255,0.95);
-            --text: var(--ink-black);
-            --border: rgba(0,0,0,0.1);
         }
-
         [data-theme="dark"] {
-            --bg: #0b1020;
+            --bg: #0b1020; --text: rgba(255,255,255,.92); --border: rgba(255,255,255,.14);
             --card: rgba(255,255,255,.08);
-            --text: rgba(255,255,255,.92);
-            --border: rgba(255,255,255,.14);
         }
-
         body { font-family: 'Noto Sans TC', sans-serif; background-color: var(--bg); color: var(--text); transition: 0.3s; scroll-behavior: smooth; }
         h1, h2, h3, h4, .serif { font-family: 'Noto Serif TC', serif; }
-
-        /* Navbar */
         .navbar { backdrop-filter: blur(15px); background: rgba(255, 255, 255, 0.8) !important; border-bottom: 1px solid var(--border); }
         [data-theme="dark"] .navbar { background: rgba(0,0,0,.35) !important; }
-
-        /* Hero Carousel */
-        .hero-carousel img { height: 60vh; object-fit: cover; filter: brightness(0.85); }
-
-        /* Weather Section */
-        .glass-panel { background: var(--card); border: 1px solid var(--border); border-radius: 18px; backdrop-filter: blur(14px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 30px; margin-bottom: 30px; }
+        .hero-carousel img { height: 55vh; object-fit: cover; filter: brightness(0.8); }
+        .glass-panel { background: var(--card); border: 1px solid var(--border); border-radius: 18px; backdrop-filter: blur(14px); padding: 30px; margin-bottom: 30px; }
         .weather-banner { margin-top: -50px; position: relative; z-index: 10; }
-
-        /* Card & Table */
         .spot-card { background: var(--card); border: 1px solid var(--border); border-radius: 15px; overflow: hidden; transition: 0.3s; cursor: pointer; }
-        .spot-card:hover { transform: translateY(-10px); border-color: var(--jp-red); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .spot-card:hover { transform: translateY(-8px); border-color: var(--jp-red); }
         .spot-img { height: 220px; object-fit: cover; }
         
-        .table-custom { background: var(--card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
-        .table-custom thead { background: var(--jp-red); color: white; }
-        .table-custom th, .table-custom td { padding: 12px; vertical-align: middle; color: var(--text); border-color: var(--border); }
+        /* 行程框框 UI [cite: 77, 181] */
+        .plan-item { 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 15px; border: 2px solid var(--border); 
+            border-radius: 12px; background: var(--card); margin-bottom: 12px;
+            transition: 0.2s;
+        }
+        .plan-item:hover { border-color: var(--jp-red); background: rgba(188, 0, 45, 0.05); }
 
-        /* Components */
-        .plan-item { display: flex; align-items: center; justify-content: space-between; padding: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); margin-bottom: 8px; }
-        #google-mini-map { height: 250px; width: 100%; border-radius: 12px; }
+        #google-mini-map { height: 250px; width: 100%; border-radius: 12px; border: 1px solid var(--border); margin-top: 15px; }
         #toTop { position: fixed; bottom: 25px; right: 25px; z-index: 99; background: var(--jp-red); color: white; border: none; padding: 10px 15px; border-radius: 8px; opacity: 0; transition: 0.3s; }
         #toTop.show { opacity: 1; }
+
+        .table-custom { background: var(--card); border-radius: 12px; overflow: hidden; }
+        .table-custom thead { background: var(--ink-black); color: white; }
     </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light sticky-top">
         <div class="container">
-            <a class="navbar-brand fw-bold text-danger" href="#">TOKYO TRAVEL FLAGSHIP</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
+            <a class="navbar-brand fw-bold text-danger" href="#">TOKYO FLAGSHIP 2025</a>
+            <div class="collapse navbar-collapse">
                 <ul class="navbar-nav ms-auto align-items-center fw-bold">
-                    <li class="nav-item px-2"><a class="nav-link" href="#weather">實時氣象</a></li>
-                    <li class="nav-item px-2"><a class="nav-link" href="#spots">景點探索</a></li>
-                    <li class="nav-item px-2"><a class="nav-link" href="#data-center">數據分析</a></li>
-                    <li class="nav-item px-2"><a class="nav-link" href="#planner">行程規劃</a></li>
+                    <li class="nav-item px-2"><a class="nav-link" href="#weather">氣象</a></li>
+                    <li class="nav-item px-2"><a class="nav-link" href="#spots">探索</a></li>
+                    <li class="nav-item px-2"><a class="nav-link" href="#data-center">數據庫</a></li>
+                    <li class="nav-item px-2"><a class="nav-link" href="#planner">我的行程</a></li>
                     <li class="nav-item ms-lg-3"><button id="themeBtn" class="btn btn-outline-danger btn-sm">切換主題</button></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div id="heroCarousel" class="carousel slide hero-carousel" data-bs-ride="carousel">
+    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1600&q=80" class="d-block w-100" alt="東京鐵塔">
-            </div>
-            <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1600&q=80" class="d-block w-100" alt="新宿夜景">
-            </div>
+            <div class="carousel-item active"><img src="https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=1600&q=80" class="d-block w-100"></div>
+            <div class="carousel-item"><img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=1600&q=80" class="d-block w-100"></div>
         </div>
-        <div class="container position-absolute top-50 start-50 translate-middle text-center text-white" style="z-index: 5;">
-            <h1 class="display-3 fw-bold serif" style="text-shadow: 2px 2px 20px rgba(0,0,0,0.6);">再發現。東京 2025</h1>
-            <p class="fs-4">跨越時代的深度導覽系統</p>
+        <div class="container position-absolute top-50 start-50 translate-middle text-center text-white">
+            <h1 class="display-3 fw-bold serif">再發現。東京</h1>
+            <p class="fs-4">專業行程規劃與數據系統</p>
         </div>
     </div>
 
     <div class="container weather-banner" id="weather">
         <div class="glass-panel" data-aos="fade-up">
-            <div class="row align-items-center border-bottom pb-3 mb-4">
-                <div class="col-6"><h3 class="serif fw-bold mb-0"><i class="bi bi-cloud-sun text-danger me-2"></i>東京。即時氣象</h3></div>
+            <div class="row align-items-center mb-4 border-bottom pb-3">
+                <div class="col-6"><h3 class="serif fw-bold mb-0">東京。即時氣象</h3></div>
                 <div class="col-6 text-end">
                     <div class="d-flex justify-content-end align-items-center">
                         <img id="current-icon" src="" width="60">
-                        <div class="ms-2 text-start"><h2 id="current-temp" class="fw-bold mb-0">--°C</h2><p id="current-desc" class="text-muted small mb-0">資料同步中...</p></div>
+                        <div class="ms-2 text-start"><h2 id="current-temp" class="fw-bold mb-0">--°C</h2><p id="current-desc" class="text-muted small mb-0">同步中...</p></div>
                     </div>
                 </div>
             </div>
-            <div id="forecast-container" class="row g-2 justify-content-center">
-                <div class="text-center py-2 text-muted small">連線至 OpenWeather One Call 3.0 (每日限制 1,000 次已生效)...</div>
-            </div>
+            <div id="forecast-container" class="row g-2"></div>
         </div>
     </div>
 
     <section id="spots" class="container py-5">
-        <div class="d-flex flex-wrap justify-content-between align-items-end mb-4" data-aos="fade-up">
-            <div><h2 class="serif fw-bold display-6">熱門景點導覽</h2><p class="text-muted">點擊收藏或加入規劃</p></div>
-            <div class="d-flex gap-2">
-                <input id="cardSearch" class="form-control" style="width: 250px;" placeholder="快速搜尋景點...">
-                <select id="catSelect" class="form-select"><option value="all">所有分類</option><option value="culture">文化傳統</option><option value="trend">潮流購物</option><option value="anime">動漫文化</option></select>
-            </div>
-        </div>
+        <h2 class="serif fw-bold mb-4" data-aos="fade-up">熱門景點導覽</h2>
         <div class="row g-4" id="spotsGrid"></div>
     </section>
 
     <section id="data-center" class="container py-5">
         <div class="glass-panel" data-aos="fade-up">
-            <h4 class="serif fw-bold mb-4"><i class="bi bi-table text-danger me-2"></i>東京景點數據庫 (即時篩選模式)</h4>
-            <div class="mb-3">
-                <input type="text" id="tableSearch" class="form-control" placeholder="輸入關鍵字以篩選表格內容（例：澀谷、文化）...">
-            </div>
+            <h4 class="serif fw-bold mb-4">🏮 景點數據分析庫 (即時搜尋)</h4>
+            <input type="text" id="tableSearch" class="form-control mb-3" placeholder="搜尋景點、區域或類型...">
             <div class="table-responsive">
-                <table class="table table-hover table-custom mb-0">
-                    <thead>
-                        <tr><th>ID</th><th>名稱</th><th>分類</th><th>停留建議</th><th>區域</th><th>推薦評分</th></tr>
-                    </thead>
-                    <tbody id="spotTableBody">
-                        </tbody>
+                <table class="table table-custom mb-0">
+                    <thead><tr><th>ID</th><th>名稱</th><th>分類</th><th>停留</th><th>區域</th><th>評分</th></tr></thead>
+                    <tbody id="spotTableBody"></tbody>
                 </table>
             </div>
         </div>
@@ -144,27 +114,24 @@
         <div class="row g-4">
             <div class="col-lg-8" data-aos="fade-right">
                 <div class="glass-panel h-100">
-                    <h4 class="fw-bold serif mb-4">我的行程規劃</h4>
+                    <h4 class="fw-bold serif mb-4">我的行程路線圖</h4>
                     <div id="planList"></div>
-                    <div id="planEmpty" class="text-muted text-center py-5">目前行程是空的，快去收藏景點吧！</div>
-                    <button id="btnExport" class="btn btn-danger w-100 mt-3 rounded-pill fw-bold">匯出行程文字檔</button>
+                    <div id="planEmpty" class="text-muted text-center py-5 border rounded-3 border-dashed">行程清單目前是空的，快去收藏景點吧！</div>
+                    <button id="btnExport" class="btn btn-danger w-100 mt-4 rounded-pill py-2 fw-bold">匯出我的規劃清單 (純文字)</button>
                 </div>
             </div>
             <div class="col-lg-4" data-aos="fade-left">
                 <div class="glass-panel h-100">
                     <h4 class="fw-bold serif mb-3">收藏清單</h4>
                     <div id="favList"></div>
-                    <div id="favEmpty" class="text-muted text-center">空空如也。</div>
+                    <div id="favEmpty" class="text-muted text-center py-3">尚未有收藏。</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-dark text-white py-5 mt-5 text-center">
-        <div class="container">
-            <p class="mb-1">API: OpenWeather (UK) & Google Maps (USA) ｜ 無大陸品牌組件</p>
-            [cite_start]<p class="small text-secondary mb-0">© 2025 Tokyo Travel flagship Guide｜資工系期末展示專用 [cite: 119]</p>
-        </div>
+    <footer class="bg-dark text-white py-4 text-center mt-5">
+        <p class="small mb-0">API: OpenWeather & Google Maps｜無大陸品牌組件｜2025 期末專案 [cite: 119]</p>
     </footer>
 
     <button id="toTop">↑</button>
@@ -174,25 +141,24 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2DLTV1iolBo5XCrGPofVJIof4DW2marE" async defer></script>
 
     <script>
-        // --- 核心設定 ---
-        const WEATHER_KEY = '1a2807cc2da97931d066c115631af03d'; //
-        const LAT = 35.6895, LON = 139.6917;
+        const WEATHER_KEY = '1a2807cc2da97931d066c115631af03d'; // [cite: 28]
+        const LAT = 35.6895, LON = 139.6917; // [cite: 29]
 
+        // 資料庫：確保 ID 是數字類型 [cite: 122]
         const spots = [
-            { id: 1, name: "淺草寺", category: "culture", area: "台東區", rating: 4.7, time: "3 小時", img: "https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&fit=crop&w=800&q=80", desc: "感受江戶風情與雷門的壯麗。", lat: 35.7148, lng: 139.7967 },
-            { id: 2, name: "澀谷十字路口", category: "trend", area: "澀谷區", rating: 4.6, time: "1 小時", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80", desc: "全球最繁忙的交會點。", lat: 35.6585, lng: 139.7013 },
-            { id: 3, name: "明治神宮", category: "culture", area: "澀谷區", rating: 4.8, time: "2 小時", img: "https://images.unsplash.com/photo-1542931287-023b922fa89b?auto=format&fit=crop&w=800&q=80", desc: "都市森林中的神聖空間。", lat: 35.6764, lng: 139.6993 },
-            { id: 4, name: "秋葉原", category: "anime", area: "千代田區", rating: 4.5, time: "5 小時", img: "https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&w=800&q=80", desc: "動漫與電器愛好者的聖地。", lat: 35.6983, lng: 139.7731 },
-            { id: 5, name: "東京鐵塔", category: "trend", area: "港區", rating: 4.9, time: "2 小時", img: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80", desc: "東京最經典的地標象徵。", lat: 35.6586, lng: 139.7454 }
+            { id: 1, name: "淺草寺", category: "culture", area: "台東區", rating: 4.7, time: "3 小時", img: "https://images.unsplash.com/photo-1590559899731-a382839e5549?auto=format&fit=crop&w=800&q=80", desc: "東京最古老的寺廟，著名的雷門所在地。", lat: 35.7148, lng: 139.7967 },
+            { id: 2, name: "澀谷十字路口", category: "trend", area: "澀谷區", rating: 4.6, time: "1 小時", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=800&q=80", desc: "全球最繁忙的十字路口。", lat: 35.6585, lng: 139.7013 },
+            { id: 3, name: "明治神宮", category: "culture", area: "澀谷區", rating: 4.8, time: "2 小時", img: "https://images.unsplash.com/photo-1542931287-023b922fa89b?auto=format&fit=crop&w=800&q=80", desc: "都市中的靜謐森林。", lat: 35.6764, lng: 139.6993 },
+            { id: 4, name: "秋葉原", category: "anime", area: "千代田區", rating: 4.5, time: "5 小時", img: "https://images.unsplash.com/photo-1554797589-7241bb691973?auto=format&fit=crop&w=800&q=80", desc: "動漫愛好者的天堂。", lat: 35.6983, lng: 139.7731 },
+            { id: 5, name: "東京鐵塔", category: "trend", area: "港區", rating: 4.9, time: "2 小時", img: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=800&q=80", desc: "東京最具代表性的標誌。", lat: 35.6586, lng: 139.7454 }
         ];
 
-        const catLabels = { culture: "文化傳統", trend: "潮流購物", anime: "動漫文化" };
-        let favSet = new Set(JSON.parse(localStorage.getItem('tokyoFav') || "[]"));
-        let plan = JSON.parse(localStorage.getItem('tokyoPlan') || "[]");
+        let favSet = new Set(JSON.parse(localStorage.getItem('tokyoFav') || "[]")); // [cite: 131]
+        let plan = JSON.parse(localStorage.getItem('tokyoPlan') || "[]"); // [cite: 132]
 
-        AOS.init({ duration: 800, once: true });
+        AOS.init();
 
-        // --- 氣象模組 ---
+        // 氣象功能 [cite: 30, 35]
         async function fetchWeather() {
             try {
                 const res = await fetch(`https://api.openweathermap.org/data/3.0/onecall?lat=${LAT}&lon=${LON}&appid=${WEATHER_KEY}&units=metric&lang=zh_tw`);
@@ -200,7 +166,6 @@
                 document.getElementById('current-temp').innerText = `${Math.round(data.current.temp)}°C`;
                 document.getElementById('current-desc').innerText = data.current.weather[0].description;
                 document.getElementById('current-icon').src = `https://openweathermap.org/img/wn/${data.current.weather[0].icon}@2x.png`;
-                
                 const fc = document.getElementById('forecast-container'); fc.innerHTML = '';
                 data.daily.slice(0, 7).forEach((day, i) => {
                     const date = new Date(day.dt * 1000);
@@ -208,110 +173,122 @@
                         <div class="small fw-bold">${i===0?'今日':(date.getMonth()+1)+'/'+date.getDate()}</div>
                         <img src="https://openweathermap.org/img/wn/${day.weather[0].icon}.png" width="30">
                         <div class="small text-danger">${Math.round(day.temp.max)}°</div>
-                        <div class="small text-muted">${Math.round(day.temp.min)}°</div>
                     </div>`;
                 });
             } catch (e) { console.log("氣象同步中..."); }
         }
 
-        // --- 整合表格渲染 (對標老師 Demo) ---
-        function renderTable(keyword = "") {
-            const body = document.getElementById('spotTableBody');
-            const kw = keyword.toLowerCase();
-            const filtered = spots.filter(s => s.name.includes(kw) || s.area.includes(kw) || catLabels[s.category].includes(kw));
-            
-            body.innerHTML = filtered.map(s => `
-                <tr class="animate__animated animate__fadeIn">
-                    <td>${s.id}</td>
-                    <td class="fw-bold">${s.name}</td>
-                    <td><span class="badge bg-secondary">${catLabels[s.category]}</span></td>
-                    <td>${s.time}</td>
-                    <td>${s.area}</td>
-                    <td><span class="text-danger fw-bold">★ ${s.rating}</span></td>
-                </tr>`).join('');
-        }
-
-        // --- 景點卡片渲染 ---
-        function renderCards() {
-            const grid = document.getElementById('spotsGrid');
-            const kw = document.getElementById('cardSearch').value.toLowerCase();
-            const cat = document.getElementById('catSelect').value;
-            
-            grid.innerHTML = spots.filter(s => (cat==='all' || s.category===cat) && s.name.includes(kw)).map(s => `
-                <div class="col-md-6 col-lg-4" data-aos="zoom-in">
-                    <div class="spot-card h-100">
-                        <img src="${s.img}" class="spot-img w-100" onclick="showDetail(${s.id})">
-                        <div class="p-3">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h5 class="fw-bold mb-0">${s.name}</h5>
-                                <button class="btn btn-sm btn-outline-danger border-0" onclick="toggleFav(${s.id})">
-                                    ${favSet.has(s.id) ? '♥' : '♡'}
+        // 核心渲染修復：加入 Number() 轉換防止類型衝突 [cite: 153, 179]
+        function renderAll() {
+            try {
+                // 1. 卡片
+                const grid = document.getElementById('spotsGrid');
+                grid.innerHTML = spots.map(s => `
+                    <div class="col-md-4">
+                        <div class="spot-card">
+                            <img src="${s.img}" class="spot-img w-100" onclick="showDetail(${s.id})">
+                            <div class="p-3">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="fw-bold">${s.name}</h5>
+                                    <button class="btn btn-sm btn-outline-danger border-0" onclick="toggleFav(${s.id})">${favSet.has(s.id)?'♥':'♡'}</button>
+                                </div>
+                                <button class="btn btn-danger btn-sm w-100 mt-2 rounded-pill" onclick="addToPlan(${s.id})" ${plan.map(Number).includes(Number(s.id))?'disabled':''}>
+                                    ${plan.map(Number).includes(Number(s.id))?'已在行程中':'加入行程'}
                                 </button>
                             </div>
-                            <p class="text-muted small">${s.desc}</p>
-                            <button class="btn btn-danger w-100 btn-sm rounded-pill" onclick="addToPlan(${s.id})" ${plan.includes(s.id)?'disabled':''}>
-                                ${plan.includes(s.id)?'已在行程中':'加入行程規劃'}
-                            </button>
                         </div>
-                    </div>
-                </div>`).join('');
+                    </div>`).join('');
+
+                // 2. 表格 (Demo 整合版)
+                const kw = document.getElementById('tableSearch').value.toLowerCase();
+                const tableBody = document.getElementById('spotTableBody');
+                tableBody.innerHTML = spots.filter(s => s.name.includes(kw) || s.area.includes(kw)).map(s => 
+                    `<tr><td>${s.id}</td><td>${s.name}</td><td>${s.category}</td><td>${s.time}</td><td>${s.area}</td><td class="text-danger">★ ${s.rating}</td></tr>`
+                ).join('');
+
+                // 3. 行程規劃列表 (修復框框沒出來的問題) 
+                const planL = document.getElementById('planList');
+                document.getElementById('planEmpty').style.display = plan.length ? 'none' : 'block';
+                planL.innerHTML = plan.map((id, i) => {
+                    const s = spots.find(x => Number(x.id) === Number(id)); // 強制數字轉換 
+                    if(!s) return ''; 
+                    return `
+                    <div class="plan-item">
+                        <div><span class="badge bg-danger me-2">D${i+1}</span><strong>${s.name}</strong> (${s.area})</div>
+                        <button class="btn btn-sm btn-outline-secondary border-0" onclick="removeFromPlan(${i})">✕</button>
+                    </div>`;
+                }).join('');
+
+                // 4. 收藏清單
+                const favL = document.getElementById('favList');
+                const favArr = [...favSet].map(id => spots.find(s => Number(s.id) === Number(id))).filter(Boolean);
+                document.getElementById('favEmpty').style.display = favArr.length ? 'none' : 'block';
+                favL.innerHTML = favArr.map(s => `<div class="plan-item small"><span>${s.name}</span><button class="btn btn-sm text-danger" onclick="toggleFav(${s.id})">移除</button></div>`).join('');
+            } catch (err) { console.error("渲染發生錯誤:", err); }
         }
 
-        // --- 動態地圖彈窗 ---
-        function showDetail(id) {
-            const s = spots.find(x => x.id === id);
-            Swal.fire({
-                title: `<h3 class="serif fw-bold">${s.name}</h3>`,
-                html: `<img src="${s.img}" class="img-fluid rounded mb-3 shadow" style="height:200px; object-fit:cover; width:100%;">
-                       <p class="small text-start">${s.desc}</p>
-                       <div id="google-mini-map"></div>`,
-                didOpen: () => {
-                    const loc = { lat: s.lat, lng: s.lng };
-                    const map = new google.maps.Map(document.getElementById("google-mini-map"), { zoom: 15, center: loc, disableDefaultUI: true });
-                    new google.maps.Marker({ position: loc, map: map });
-                },
-                confirmButtonText: '開啟 Google 導航', confirmButtonColor: '#bc002d'
-            }).then(r => { if(r.isConfirmed) window.open(`https://www.google.com/maps/search/?api=1&query=${s.lat},${s.lng}`); });
+        // 功能修復：加入行程 [cite: 164]
+        function addToPlan(id) {
+            const numId = Number(id);
+            if(!plan.map(Number).includes(numId)) { 
+                plan.push(numId); 
+                localStorage.setItem('tokyoPlan', JSON.stringify(plan)); 
+                renderAll();
+                Swal.fire({ icon: 'success', title: '成功！', text: '景點已加入行程清單。', timer: 1200, showConfirmButton: false });
+            }
         }
 
-        // --- 交互邏輯 ---
+        function removeFromPlan(idx) {
+            plan.splice(idx, 1);
+            localStorage.setItem('tokyoPlan', JSON.stringify(plan));
+            renderAll();
+        }
+
         function toggleFav(id) {
-            if(favSet.has(id)) favSet.delete(id); else favSet.add(id);
+            const numId = Number(id);
+            if(favSet.has(numId)) favSet.delete(numId); else favSet.add(numId);
             localStorage.setItem('tokyoFav', JSON.stringify([...favSet]));
             renderAll();
         }
 
-        function addToPlan(id) {
-            if(!plan.includes(id)) { plan.push(id); localStorage.setItem('tokyoPlan', JSON.stringify(plan)); renderAll(); }
+        // 匯出功能修復：彈窗與複製功能 
+        document.getElementById('btnExport').onclick = function() {
+            if(plan.length === 0) { Swal.fire('行程為空', '快去上面的卡片點擊加入吧！', 'warning'); return; }
+            let text = "🗺️ 我的東京時光漫步行程：\n\n";
+            plan.forEach((id, i) => {
+                const s = spots.find(x => Number(x.id) === Number(id));
+                if(s) text += `[Day ${i+1}] ${s.name} (${s.area}) - 停留建議: ${s.time}\n`;
+            });
+            Swal.fire({
+                title: '行程規劃匯出',
+                html: `<textarea class="form-control" rows="8" readonly>${text}</textarea>`,
+                confirmButtonText: '複製文字', confirmButtonColor: '#bc002d'
+            }).then(() => {
+                navigator.clipboard.writeText(text);
+                Swal.fire('已複製！', '你可以將行程分享給朋友了。', 'success');
+            });
         }
 
-        function renderAll() {
-            renderCards(); renderTable();
-            const favL = document.getElementById('favList');
-            const arr = [...favSet].map(id => spots.find(s => s.id === id)).filter(Boolean);
-            document.getElementById('favEmpty').style.display = arr.length ? 'none' : 'block';
-            favL.innerHTML = arr.map(s => `<div class="plan-item small"><span class="fw-bold">${s.name}</span><button class="btn btn-sm text-danger" onclick="toggleFav(${s.id})">移除</button></div>`).join('');
-            
-            const planL = document.getElementById('planList');
-            document.getElementById('planEmpty').style.display = plan.length ? 'none' : 'block';
-            planL.innerHTML = plan.map((id, i) => {
-                const s = spots.find(x => x.id === id);
-                return `<div class="plan-item"><div class="fw-bold"><span class="text-danger me-2">DAY ${i+1}</span>${s.name}</div><button class="btn btn-sm btn-outline-secondary" onclick="plan.splice(${i},1);localStorage.setItem('tokyoPlan',JSON.stringify(plan));renderAll();">✕</button></div>`;
-            }).join('');
+        // 地圖彈窗 [cite: 35, 166]
+        function showDetail(id) {
+            const s = spots.find(x => Number(x.id) === Number(id));
+            Swal.fire({
+                title: `<h3 class="serif fw-bold">${s.name}</h3>`,
+                html: `<img src="${s.img}" class="img-fluid rounded mb-2" style="height:200px; width:100%; object-fit:cover;"><div id="google-mini-map"></div>`,
+                didOpen: () => {
+                    const loc = { lat: s.lat, lng: s.lng };
+                    const map = new google.maps.Map(document.getElementById("google-mini-map"), { zoom: 15, center: loc, disableDefaultUI: true });
+                    new google.maps.Marker({ position: loc, map: map });
+                }
+            });
         }
 
-        // --- 事件監聽 ---
+        // 初始化
         document.getElementById('themeBtn').onclick = () => {
             const t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
             document.documentElement.setAttribute('data-theme', t);
         };
-        document.getElementById('tableSearch').oninput = (e) => renderTable(e.target.value);
-        document.getElementById('cardSearch').oninput = renderCards;
-        document.getElementById('catSelect').onchange = renderCards;
-        window.onscroll = () => document.getElementById('toTop').classList.toggle('show', window.scrollY > 600);
-        document.getElementById('toTop').onclick = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-
-        // 初始化
+        document.getElementById('tableSearch').oninput = renderAll;
         fetchWeather(); renderAll();
     </script>
 </body>
